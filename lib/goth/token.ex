@@ -60,7 +60,7 @@ defmodule Goth.Token do
   """
   @spec from_response_json(String.t, String.t) :: t
   def from_response_json(scope, json) do
-    {:ok, attrs} = json |> Poison.decode
+    {:ok, attrs} = json |> Jason.decode
     %__MODULE__{
       token:   attrs["access_token"],
       type:    attrs["token_type"],

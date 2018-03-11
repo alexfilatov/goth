@@ -27,7 +27,7 @@ defmodule Goth.TokenStoreTest do
 
   test "an expired token is refreshed immediately", %{bypass: bypass} do
     Bypass.expect bypass, fn conn ->
-      Plug.Conn.resp(conn, 201, Poison.encode!(%{"access_token" => "fresh", "token_type" => "Bearer", "expires_in" => 3600}))
+      Plug.Conn.resp(conn, 201, Jason.encode!(%{"access_token" => "fresh", "token_type" => "Bearer", "expires_in" => 3600}))
     end
 
     token = %Token{scope: "refresh-me", token: "stale", type: "Bearer", expires: 1}

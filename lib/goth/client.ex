@@ -74,7 +74,7 @@ defmodule Goth.Client do
   def json(scope, iat) do
     scope
     |> claims(iat)
-    |> Poison.encode!
+    |> Jason.encode!
   end
 
   def jwt(scope), do: jwt(scope, :os.system_time(:seconds))

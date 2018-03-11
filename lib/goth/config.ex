@@ -37,7 +37,7 @@ defmodule Goth.Config do
   # Decodes JSON (if configured) and sets oauth token source
   defp decode_json(json) do
     json
-    |> Poison.decode!
+    |> Jason.decode!
     |> Map.put("token_source", :oauth)
   end
 

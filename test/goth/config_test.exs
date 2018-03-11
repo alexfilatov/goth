@@ -25,7 +25,7 @@ defmodule Goth.ConfigTest do
   end
 
   test "the initial state is what's passed in from the app config" do
-    state = "config/test-credentials.json" |> Path.expand |> File.read! |> Poison.decode!
+    state = "config/test-credentials.json" |> Path.expand |> File.read! |> Jason.decode!
     state |> Map.keys |> Enum.each(fn(key) ->
       assert {:ok, state[key]} == Config.get(key)
     end)

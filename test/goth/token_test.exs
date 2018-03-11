@@ -26,7 +26,7 @@ defmodule Goth.TokenTest do
 
   test "it will pull a token from the API the first time", %{bypass: bypass} do
     Bypass.expect bypass, fn conn ->
-      Plug.Conn.resp(conn, 201, Poison.encode!(%{"access_token" => "123", "token_type" => "Bearer", "expires_in" => 3600}))
+      Plug.Conn.resp(conn, 201, Jason.encode!(%{"access_token" => "123", "token_type" => "Bearer", "expires_in" => 3600}))
     end
 
      assert {:ok, %Token{token: "123"}} = Token.for_scope("random")
@@ -34,7 +34,7 @@ defmodule Goth.TokenTest do
 
   test "it will pull a token from the token store if cached", %{bypass: bypass} do
     Bypass.expect bypass, fn conn ->
-      Plug.Conn.resp(conn, 201, Poison.encode!(%{"access_token" => "123", "token_type" => "Bearer", "expires_in" => 3600}))
+      Plug.Conn.resp(conn, 201, Jason.encode!(%{"access_token" => "123", "token_type" => "Bearer", "expires_in" => 3600}))
     end
 
     assert {:ok, %Token{token: access_token}} = Token.for_scope("another-random")
@@ -47,14 +47,14 @@ defmodule Goth.TokenTest do
 
   test "refreshing a token hits the API", %{bypass: bypass} do
     Bypass.expect bypass, fn conn ->
-      Plug.Conn.resp(conn, 201, Poison.encode!(%{"access_token" => "123", "token_type" => "Bearer", "expires_in" => 3600}))
+      Plug.Conn.resp(conn, 201, Jason.encode!(%{"access_token" => "123", "token_type" => "Bearer", "expires_in" => 3600}))
     end
 
     assert {:ok, token} = Token.for_scope("first")
     assert token.token != nil
 
     Bypass.expect bypass, fn conn ->
-      Plug.Conn.resp(conn, 201, Poison.encode!(%{"access_token" => "321", "token_type" => "Bearer", "expires_in" => 3600}))
+      Plug.Conn.resp(conn, 201, Jason.encode!(%{"access_token" => "321", "token_type" => "Bearer", "expires_in" => 3600}))
     end
 
     assert {:ok, %Token{token: at2}} = Token.refresh!(token)
